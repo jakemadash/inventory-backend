@@ -8,18 +8,20 @@ const createEntityController = (entityName, dbMethods) => ({
       : dbMethods.getAll());
     console.log(`${entityName} List:`, items);
     res.send(
-      `${entityName} List: ` + items.map((item) => item.name).join(", ")
+      `${entityName} list: ` + items.map((item) => item.name).join(", ")
     );
   },
 
   createGet: (req, res) => {
-    res.sendFile(path.join(__dirname, `../forms/create${entityName}.html`));
+    console.log(entityName);
+    res.sendFile(path.join(__dirname, `forms/create${entityName}.html`));
   },
 
   createPost: async (req, res) => {
-    const { name } = req.body;
-    await dbMethods.insert(name);
-    res.redirect("/");
+    console.log(req.body);
+    const { artist } = req.body;
+    await dbMethods.insert(artist);
+    res.redirect("/artists");
   },
 
   delete: async (req, res) => {

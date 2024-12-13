@@ -1,6 +1,6 @@
 const express = require("express");
-const createDbMethods = require("../db/queries");
-const createEntityController = require("../controllers/entityController");
+const createDbMethods = require("./db/queries");
+const createEntityController = require("./entityController");
 
 const createDynamicRouter = (entityName) => {
   const router = express.Router();
@@ -9,8 +9,8 @@ const createDynamicRouter = (entityName) => {
 
   // Define routes dynamically
   router.get("/", controller.list);
-  router.get("/create", controller.createGet);
-  router.post("/create", controller.createPost);
+  router.get("/new", controller.createGet);
+  router.post("/new", controller.createPost);
   router.post("/:id/delete", controller.delete);
   router.get("/:id/edit", controller.editGet);
   router.post("/:id/edit", controller.editPost);

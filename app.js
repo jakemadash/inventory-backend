@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const createDynamicRouter = require("./routes/dynamicRouter");
+const createDynamicRouter = require("./entityRouter");
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
