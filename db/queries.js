@@ -6,6 +6,14 @@ const createDbMethods = (tableName) => ({
     return rows;
   },
 
+  get: async (id) => {
+    const { rows } = await pool.query(
+      `SELECT * FROM ${tableName} WHERE id = $1`,
+      [id]
+    );
+    return rows.length > 0 ? rows[0] : null;
+  },
+
   search: async (searchTerm) => {
     const { rows } = await pool.query(
       `SELECT * FROM ${tableName} WHERE name ILIKE $1`,

@@ -1,19 +1,31 @@
 const path = require("path");
 
 const createEntityController = (entityName, dbMethods) => ({
-  list: async (req, res) => {
+  getAll: async (req, res) => {
     const { searchTerm } = req.query;
     const items = await (searchTerm
       ? dbMethods.search(searchTerm)
       : dbMethods.getAll());
     console.log(`${entityName} List:`, items);
     res.send(
-      `${entityName} list: ` + items.map((item) => item.name).join(", ")
+      `${entityName} list: ` +
+        items
+          .map((item) => `<a href="/${entityName}/${item.id}">${item.name}</a>`)
+          .join(", ")
     );
   },
 
+  getOne: async (req, res) => {
+    const { id } = req.params;
+    const item = await dbMethods.get(id);
+    if (item) {
+      res.send(item.name);
+    } else {
+      res.status(404).send("Item not found");
+    }
+  },
+
   createGet: (req, res) => {
-    console.log(entityName);
     res.sendFile(path.join(__dirname, `forms/create${entityName}.html`));
   },
 
