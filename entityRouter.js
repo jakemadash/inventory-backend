@@ -11,7 +11,7 @@ const createDynamicRouter = (entityName) => {
   router.post("/new", controller.createPost);
   router.get("/:id/edit", controller.editGet);
   router.post("/:id/edit", controller.editPost);
-  router.post("/:id/delete", controller.delete);
+  router.delete("/:id/delete", controller.delete);
   router.get("/:id", controller.getOne);
   router.get("/", controller.getAll);
 
