@@ -38,7 +38,8 @@ const createEntityController = (entityName, dbMethods) => ({
 
   delete: async (req, res) => {
     const { id } = req.params;
-    await dbMethods.delete(id);
+    console.log(req.params);
+    // await dbMethods.delete(id);
     res.redirect("/");
   },
 
