@@ -7,13 +7,11 @@ const createDynamicRouter = (entityName) => {
   const dbMethods = createDbMethods(entityName);
   const controller = createEntityController(entityName, dbMethods);
 
-  router.get("/new", controller.createGet);
   router.post("/new", controller.createPost);
-  router.get("/:id/edit", controller.editGet);
-  router.post("/:id/edit", controller.editPost);
-  router.delete("/:id/delete", controller.delete);
-  router.get("/:id", controller.getOne);
   router.get("/", controller.getAll);
+  router.get("/:id", controller.getOne);
+  router.delete("/:id/delete", controller.delete);
+  router.put("/:id/edit", controller.editPost);
 
   return router;
 };
