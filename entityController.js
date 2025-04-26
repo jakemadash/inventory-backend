@@ -7,12 +7,7 @@ const createEntityController = (entityName, dbMethods) => ({
       ? dbMethods.search(searchTerm)
       : dbMethods.getAll());
     console.log(`${entityName} List:`, items);
-    res.send(
-      `${entityName} list: ` +
-        items
-          .map((item) => `<a href="/${entityName}/${item.id}">${item.name}</a>`)
-          .join(", ")
-    );
+    res.json(items);
   },
 
   getOne: async (req, res) => {
