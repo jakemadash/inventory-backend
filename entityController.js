@@ -32,10 +32,15 @@ const createEntityController = (entityName, dbMethods) => ({
   },
 
   delete: async (req, res) => {
-    const { id } = req.params;
-    console.log(req.params);
-    // await dbMethods.delete(id);
-    res.redirect("/");
+    try {
+      const id = Number(req.params.id);
+      console.log("id:", id);
+      await dbMethods.delete(id);
+      res.status(200).json({ success: true });
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ success: false, error: e.message });
+    }
   },
 
   editGet: async (req, res) => {
