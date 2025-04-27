@@ -35,8 +35,8 @@ const createEntityController = (entityName, dbMethods) => ({
 
   createPost: async (req, res) => {
     try {
-      const { artist } = req.body;
-      await dbMethods.insert(artist);
+      const { value } = req.body;
+      await dbMethods.insert(value);
       res
         .status(201)
         .json({ success: true, message: `${entityName} created successfully` });
@@ -69,9 +69,9 @@ const createEntityController = (entityName, dbMethods) => ({
 
   editPost: async (req, res) => {
     try {
-      const { id } = req.params;
-      const { name } = req.body;
-      await dbMethods.edit(id, name);
+      const id = Number(req.params.id);
+      const { value } = req.body;
+      await dbMethods.edit(id, value);
       res
         .status(200)
         .json({ success: true, message: `${entityName} updated successfully` });
