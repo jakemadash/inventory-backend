@@ -1,5 +1,3 @@
-const path = require("path");
-
 const createEntityController = (entityName, dbMethods) => ({
   getAll: async (req, res) => {
     try {
@@ -12,25 +10,6 @@ const createEntityController = (entityName, dbMethods) => ({
       console.error(e);
       res.status(500).json({ success: false, error: e.message });
     }
-  },
-
-  getOne: async (req, res) => {
-    try {
-      const { id } = req.params;
-      const item = await dbMethods.get(id);
-      if (item) {
-        res.status(200).json(item);
-      } else {
-        res.status(404).json({ success: false, message: "Item not found" });
-      }
-    } catch (e) {
-      console.error(e);
-      res.status(500).json({ success: false, error: e.message });
-    }
-  },
-
-  createGet: (req, res) => {
-    res.sendFile(path.join(__dirname, `forms/create${entityName}.html`));
   },
 
   createPost: async (req, res) => {
@@ -58,13 +37,6 @@ const createEntityController = (entityName, dbMethods) => ({
       console.error(e);
       res.status(500).json({ success: false, error: e.message });
     }
-  },
-
-  editGet: async (req, res) => {
-    const { id } = req.params;
-    res.sendFile(
-      path.join(__dirname, `../forms/edit${entityName}.html?id=${id}`)
-    );
   },
 
   editPost: async (req, res) => {
