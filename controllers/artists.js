@@ -32,8 +32,8 @@ const artistsController = {
 
   create: async (req, res) => {
     try {
-      const { value } = req.body;
-      await artistsDb.insert(value);
+      const { artist } = req.body;
+      await artistsDb.insert(artist);
       res
         .status(201)
         .json({ success: true, message: "Artist created successfully" });
@@ -59,8 +59,8 @@ const artistsController = {
   edit: async (req, res) => {
     try {
       const id = Number(req.params.id);
-      const { value } = req.body;
-      await artistsDb.edit(id, value);
+      const { artist } = req.body;
+      await artistsDb.edit(id, artist);
       res
         .status(200)
         .json({ success: true, message: "Artist updated successfully" });

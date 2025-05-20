@@ -22,15 +22,15 @@ const artistsDb = {
   },
 
   insert: async (name) => {
-    await pool.query("INSERT INTO artists (name) VALUES ($1)", [name]);
+    await pool.query("INSERT INTO artists (artist) VALUES ($1)", [name]);
   },
 
   delete: async (id) => {
-    await pool.query("DELETE FROM artists WHERE id = $1", [id]);
+    await pool.query("DELETE FROM artists WHERE artist_id = $1", [id]);
   },
 
   edit: async (id, newName) => {
-    await pool.query("UPDATE artists SET name = $1 WHERE id = $2", [
+    await pool.query("UPDATE artists SET artist = $1 WHERE artist_id = $2", [
       newName,
       id,
     ]);
