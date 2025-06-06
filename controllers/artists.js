@@ -32,8 +32,10 @@ const artistsController = {
 
   create: async (req, res) => {
     try {
-      const { artist } = req.body;
-      await artistsDb.insert(artist);
+      const { artist, genres } = req.body;
+      console.log("genres", genres, typeof genres);
+      const artistId = await artistsDb.insert(artist);
+
       res
         .status(201)
         .json({ success: true, message: "Artist created successfully" });

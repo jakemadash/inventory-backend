@@ -22,7 +22,11 @@ const artistsDb = {
   },
 
   insert: async (name) => {
-    await pool.query("INSERT INTO artists (artist) VALUES ($1)", [name]);
+    const result = await pool.query(
+      "INSERT INTO artists (artist) VALUES ($1) RETURNING artist_id",
+      [name]
+    );
+    return result.rows[0].artist_id;
   },
 
   delete: async (id) => {
