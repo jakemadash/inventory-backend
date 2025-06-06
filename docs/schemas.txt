@@ -1,0 +1,45 @@
+-- Artists Table
+CREATE TABLE artists (
+    artist_id SERIAL PRIMARY KEY,
+    artist VARCHAR(255) NOT NULL
+);
+
+-- Years Table
+CREATE TABLE years (
+    year_id SERIAL PRIMARY KEY,
+    year INTEGER NOT NULL UNIQUE
+);
+
+-- Genres Table
+CREATE TABLE genres (
+    genre_id SERIAL PRIMARY KEY,
+    genre VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Albums Table
+CREATE TABLE albums (
+    album_id SERIAL PRIMARY KEY,
+    album VARCHAR(255) NOT NULL,
+    artist_id INTEGER NOT NULL,
+    year_id INTEGER NOT NULL,
+    FOREIGN KEY (artist_id) REFERENCES artists(artist_id) ON DELETE CASCADE,
+    FOREIGN KEY (year_id) REFERENCES years(year_id) ON DELETE CASCADE
+);
+
+-- Album_Genres Junction Table
+CREATE TABLE album_genres (
+    album_id INTEGER NOT NULL,
+    genre_id INTEGER NOT NULL,
+    PRIMARY KEY (album_id, genre_id),
+    FOREIGN KEY (album_id) REFERENCES albums(album_id) ON DELETE CASCADE,
+    FOREIGN KEY (genre_id) REFERENCES genres(genre_id) ON DELETE CASCADE
+);
+
+-- Artist_Genres Junction Table
+CREATE TABLE artist_genres (
+    artist_id INTEGER NOT NULL,
+    genre_id INTEGER NOT NULL,
+    PRIMARY KEY (artist_id, genre_id),
+    FOREIGN KEY (artist_id) REFERENCES artists(artist_id) ON DELETE CASCADE,
+    FOREIGN KEY (genre_id) REFERENCES genres(genre_id) ON DELETE CASCADE
+);
