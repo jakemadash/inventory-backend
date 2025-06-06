@@ -1,4 +1,5 @@
 const artistsDb = require("../db/artists");
+const genresDb = require("../db/genres");
 
 const artistsController = {
   getAll: async (req, res) => {
@@ -33,8 +34,23 @@ const artistsController = {
   create: async (req, res) => {
     try {
       const { artist, genres } = req.body;
-      console.log("genres", genres, typeof genres);
       const artistId = await artistsDb.insert(artist);
+
+      if (genres.length > 0) {
+        for (const genreName of genres) {
+          let genreId;
+          const existingGenre = await genresDb.findByName(genreName);
+
+          if (existingGenre) genreId = existingGenre.genre_id;
+          else genreId = await genresDb.insert(genreName);
+
+          // Insert into artist_genres junction table
+          // await db.query(
+          //   "INSERT INTO artist_genres (artist_id, genre_id) VALUES (?, ?)",
+          //   [artistId, genreId]
+          // );
+        }
+      }
 
       res
         .status(201)

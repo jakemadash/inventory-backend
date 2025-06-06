@@ -13,16 +13,27 @@ const genresDb = {
     return rows.length > 0 ? rows[0] : null;
   },
 
+  findByName: async (name) => {
+    const { rows } = await pool.query("SELECT * FROM genres WHERE genre = $1", [
+      name,
+    ]);
+    return rows.length > 0 ? rows[0] : null;
+  },
+
   search: async (searchTerm) => {
     const { rows } = await pool.query(
-      "SELECT * FROM genres WHERE name ILIKE $1",
+      "SELECT * FROM genres WHERE genre ILIKE $1",
       [`%${searchTerm}%`]
     );
     return rows;
   },
 
   insert: async (name) => {
-    await pool.query("INSERT INTO genres (name) VALUES ($1)", [name]);
+    const result = await pool.query(
+      "INSERT INTO genres (genre) VALUES ($1) RETURNING genre_id",
+      [name]
+    );
+    return result.rows[0].genre_id;
   },
 
   delete: async (id) => {
@@ -30,7 +41,7 @@ const genresDb = {
   },
 
   edit: async (id, newName) => {
-    await pool.query("UPDATE genres SET name = $1 WHERE id = $2", [
+    await pool.query("UPDATE genres SET genre = $1 WHERE id = $2", [
       newName,
       id,
     ]);
