@@ -1,5 +1,6 @@
 const artistsDb = require("../db/artists");
 const genresDb = require("../db/genres");
+const artistGenresDb = require("../db/artistGenres");
 
 const artistsController = {
   getAll: async (req, res) => {
@@ -36,7 +37,7 @@ const artistsController = {
       const { artist, genres } = req.body;
       const artistId = await artistsDb.insert(artist);
 
-      if (genres.length > 0) {
+      if (genres?.length > 0) {
         for (const genreName of genres) {
           let genreId;
           const existingGenre = await genresDb.findByName(genreName);
@@ -44,11 +45,7 @@ const artistsController = {
           if (existingGenre) genreId = existingGenre.genre_id;
           else genreId = await genresDb.insert(genreName);
 
-          // Insert into artist_genres junction table
-          // await db.query(
-          //   "INSERT INTO artist_genres (artist_id, genre_id) VALUES (?, ?)",
-          //   [artistId, genreId]
-          // );
+          await artistGenresDb.insert(artistId, genreId);
         }
       }
 
