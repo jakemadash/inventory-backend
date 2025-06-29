@@ -3,12 +3,13 @@ const pool = require("./pool");
 const artistsDb = {
   getAll: async () => {
     const query = `SELECT 
+    a.artist_id,
     a.artist,
     COALESCE(json_agg(g.genre ORDER BY g.genre) FILTER (WHERE g.genre IS NOT NULL), '[]') AS genres
     FROM artists a
     LEFT JOIN artist_genres ag ON a.artist_id = ag.artist_id
     LEFT JOIN genres g ON ag.genre_id = g.genre_id
-    GROUP BY a.artist
+    GROUP BY a.artist, a.artist_id
     ORDER BY a.artist;
     `;
 
