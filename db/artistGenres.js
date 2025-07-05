@@ -26,6 +26,18 @@ const artistGenresDb = {
     );
     return rows.map((r) => r.genre);
   },
+
+  getArtistsByGenreId: async (genreId) => {
+    const { rows } = await pool.query(
+      `SELECT a.artist
+       FROM artists a
+       INNER JOIN artist_genres ag ON a.artist_id = ag.artist_id
+       WHERE ag.genre_id = $1
+       ORDER BY a.artist`,
+      [genreId]
+    );
+    return rows.map((r) => r.artist);
+  },
 };
 
 module.exports = artistGenresDb;

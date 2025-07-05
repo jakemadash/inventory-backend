@@ -17,6 +17,14 @@ const artistsDb = {
     return rows;
   },
 
+  findByName: async (name) => {
+    const { rows } = await pool.query(
+      "SELECT * FROM artists WHERE artist = $1",
+      [name]
+    );
+    return rows.length > 0 ? rows[0] : null;
+  },
+
   insert: async (name) => {
     const result = await pool.query(
       "INSERT INTO artists (artist) VALUES ($1) RETURNING artist_id",
