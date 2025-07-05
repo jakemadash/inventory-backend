@@ -2,7 +2,18 @@ const pool = require("./pool");
 
 const genresDb = {
   getAll: async () => {
-    const { rows } = await pool.query("SELECT * FROM genres");
+    const query = `SELECT 
+    g.genre_id,
+    g.genre,
+    COALESCE(json_agg(a.artist ORDER BY a.artist) FILTER (WHERE a.artist IS NOT NULL), '[]') AS artists
+    FROM genres g
+    LEFT JOIN artist_genres ag ON g.genre_id = ag.genre_id
+    LEFT JOIN artists a ON ag.artist_id = a.artist_id
+    GROUP BY g.genre, g.genre_id
+    ORDER BY g.genre;
+    `;
+
+    const { rows } = await pool.query(query);
     return rows;
   },
 
