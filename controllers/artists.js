@@ -13,27 +13,8 @@ const getGenreId = async (genreName) => {
 const artistsController = {
   getAll: async (req, res) => {
     try {
-      const { searchTerm } = req.query;
-      const artists = await (searchTerm
-        ? artistsDb.search(searchTerm)
-        : artistsDb.getAll());
+      const artists = await artistsDb.getAll();
       res.status(200).json(artists);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, error: error.message });
-    }
-  },
-
-  getOne: async (req, res) => {
-    try {
-      const id = Number(req.params.id);
-      const artist = await artistsDb.get(id);
-      if (!artist) {
-        return res
-          .status(404)
-          .json({ success: false, message: "Artist not found" });
-      }
-      res.status(200).json(artist);
     } catch (error) {
       console.error(error);
       res.status(500).json({ success: false, error: error.message });
