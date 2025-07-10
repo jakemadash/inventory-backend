@@ -6,23 +6,11 @@ const albumsDb = {
     return rows;
   },
 
-  get: async (id) => {
-    const { rows } = await pool.query("SELECT * FROM albums WHERE id = $1", [
-      id,
-    ]);
-    return rows.length > 0 ? rows[0] : null;
-  },
-
-  search: async (searchTerm) => {
-    const { rows } = await pool.query(
-      "SELECT * FROM albums WHERE name ILIKE $1",
-      [`%${searchTerm}%`]
+  insert: async (album) => {
+    await pool.query(
+      "INSERT INTO albums (album, year, artist_id) VALUES ($1, $2, $3)",
+      [album.title, album.year, album.artistId]
     );
-    return rows;
-  },
-
-  insert: async (name) => {
-    await pool.query("INSERT INTO albums (name) VALUES ($1)", [name]);
   },
 
   delete: async (id) => {

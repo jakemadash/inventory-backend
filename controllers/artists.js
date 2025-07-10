@@ -1,5 +1,6 @@
 const artistsDb = require("../db/artists");
 const genresDb = require("../db/genres");
+const albumsDb = require("../db/albums");
 const artistGenresDb = require("../db/artistGenres");
 
 const getGenreId = async (genreName) => {
@@ -23,13 +24,20 @@ const artistsController = {
 
   create: async (req, res) => {
     try {
-      const { artist, genres } = req.body;
+      const { artist, genres, albums } = req.body;
       const artistId = await artistsDb.insert(artist);
 
       if (genres?.length > 0) {
         for (const genreName of genres) {
           const genreId = await getGenreId(genreName);
           await artistGenresDb.insert(artistId, genreId);
+        }
+      }
+
+      if (albums?.length > 0) {
+        for (let album of albums) {
+          album = { ...album, artistId };
+          await albumsDb.insert(album);
         }
       }
 
