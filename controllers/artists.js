@@ -66,12 +66,24 @@ const artistsController = {
   edit: async (req, res) => {
     try {
       const id = Number(req.params.id);
-      const { artist, genres } = req.body;
+      const { artist, genres, albums } = req.body;
       await artistsDb.edit(id, artist);
 
       const currentGenres = await artistGenresDb.getGenresByArtistId(id);
       const genresToAdd = genres.filter((g) => !currentGenres.includes(g));
       const genresToRemove = currentGenres.filter((g) => !genres.includes(g));
+
+      const currentAlbums = await albumsDb.getAlbumsByArtistId(id);
+      const currentAlbumKeys = currentAlbums.map((a) => `${a.title}-${a.year}`);
+      const newAlbumKeys = albums.map((a) => `${a.title}-${a.year}`);
+
+      const albumsToAdd = albums.filter(
+        (a) => !currentAlbumKeys.includes(`${a.title}-${a.year}`)
+      );
+
+      const albumsToRemove = currentAlbums.filter(
+        (a) => !newAlbumKeys.includes(`${a.title}-${a.year}`)
+      );
 
       for (const genreName of genresToAdd) {
         const genreId = await getGenreId(genreName);
@@ -83,6 +95,15 @@ const artistsController = {
         if (genre) {
           await artistGenresDb.delete(id, genre.genre_id);
         }
+      }
+
+      for (let album of albumsToAdd) {
+        album = { ...album, artistId: id };
+        await albumsDb.insert(album);
+      }
+
+      for (const album of albumsToRemove) {
+        await albumsDb.delete(album.album_id);
       }
 
       res

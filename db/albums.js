@@ -6,6 +6,14 @@ const albumsDb = {
     return rows;
   },
 
+  getAlbumsByArtistId: async (id) => {
+    const { rows } = await pool.query(
+      "SELECT * FROM albums WHERE artist_id = $1",
+      [id]
+    );
+    return rows;
+  },
+
   insert: async (album) => {
     await pool.query(
       "INSERT INTO albums (album, year, artist_id) VALUES ($1, $2, $3)",
@@ -14,7 +22,7 @@ const albumsDb = {
   },
 
   delete: async (id) => {
-    await pool.query("DELETE FROM albums WHERE id = $1", [id]);
+    await pool.query("DELETE FROM albums WHERE album_id = $1", [id]);
   },
 
   edit: async (id, newName) => {
