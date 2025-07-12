@@ -2,7 +2,12 @@ const pool = require("./pool");
 
 const albumsDb = {
   getAll: async () => {
-    const { rows } = await pool.query("SELECT * FROM albums");
+    const { rows } = await pool.query(`
+      SELECT year, JSON_AGG(albums.album) AS albums
+      FROM albums
+      GROUP BY year
+      ORDER BY year
+    `);
     return rows;
   },
 
@@ -23,13 +28,6 @@ const albumsDb = {
 
   delete: async (id) => {
     await pool.query("DELETE FROM albums WHERE album_id = $1", [id]);
-  },
-
-  edit: async (id, newName) => {
-    await pool.query("UPDATE albums SET name = $1 WHERE id = $2", [
-      newName,
-      id,
-    ]);
   },
 };
 
